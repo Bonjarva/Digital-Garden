@@ -61,11 +61,59 @@ This project is part of my 3-month learning plan to prepare for the **Azure Deve
 
 _(Updated during development)_
 
-- Week 1: Project initialized, README created, GitHub repo set up
-- Next step: Deploy Azure Static Web App with placeholder frontend
+- Week 1 (**Complete**):
+- Project initialized, README created, GitHub repo set up
+- Deployed Azure Static Web App with placeholder frontend
+- Basic Github actions CI/CD set up
+
+In progress: Week 2/3
+
+- Migrate app to React
+- Make basic wire frame of front end
+- Create folder structure
+- Build placeholder pages from wire frame
+- Build proper Navigation bar (logo/Title)
+- CSS or Tailwind addition
+  - Nav, Footer, Tiles
+- Update README
+
+  - with new front end structure
+  - Project timeline and milestones.
+
+  Week 3:
+
+  - Buy my own domain and update Azure to host on here
+    - Azure allows 2 free domains on static pages.
 
 ---
 
 ## 🚀 Goals
 
-This projec
+This project helps develop the core skills needed for **AZ-204**, including:
+
+- Serverless compute
+- Cloud storage
+- API design
+- Authentication & authorization
+- Monitoring & logging
+- Azure SDK usage
+- CI/CD pipelines
+- Cloud deployment best practices
+
+---
+
+## 📅 Roadmap
+
+_(To be added as development progresses)_
+
+---
+
+## 📜 License
+
+MIT License (or choose another license)
+
+---
+
+## 🤝 Contributing
+
+This is a learning project, but suggestions and ideas are welcome.
