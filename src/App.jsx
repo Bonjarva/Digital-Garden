@@ -1,24 +1,27 @@
-import { useState } from "react";
+import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-
-import "./App.css";
-import About from "./pages/about";
-import Home from "./pages/home";
-import Seeds from "./pages/seeds";
-import Plots from "./pages/plots";
-
-import NavBar from "./components/navbar";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
+import Home from "./pages/Home";
+import Seeds from "./pages/Seeds";
+import Plots from "./pages/Plots";
+import About from "./pages/About";
 
 function App() {
   return (
     <Router>
-      <NavBar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/seeds" element={<Seeds />} />
-        <Route path="/plots" element={<Plots />} />
-        <Route path="/about" element={<About />} />
-      </Routes>
+      <div className="min-h-screen flex flex-col">
+        <Navbar />
+        <main className="flex-grow container mx-auto p-6">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/seeds" element={<Seeds />} />
+            <Route path="/plots" element={<Plots />} />
+            <Route path="/about" element={<About />} />
+          </Routes>
+        </main>
+        <Footer />
+      </div>
     </Router>
   );
 }

@@ -1,12 +1,16 @@
-import { useState } from "react";
-import "../App.css";
+import React from "react";
 
 function Home() {
   return (
-    <>
-      <h1>Welcome to your Digital Garden 🌿</h1>
-      <p>Time to get planting those seeds.</p>
-    </>
+    <div>
+      <h1 className="text-3xl font-bold mb-4">
+        Welcome to your Digital Garden
+      </h1>
+      <p className="text-gray-700">
+        Track your seeds of ideas, grow your plots of knowledge, and watch your
+        garden flourish.
+      </p>
+    </div>
   );
 }
 

@@ -1,12 +1,14 @@
-import { useState } from "react";
-import "../App.css";
+import React from "react";
 
 function About() {
   return (
-    <>
-      <h1>About Digital Garden</h1>
-      <p>The about information</p>
-    </>
+    <div>
+      <h1 className="text-3xl font-bold mb-4">About</h1>
+      <p className="text-gray-700">
+        This is a personal digital garden project to experiment with React,
+        Tailwind, and Azure.
+      </p>
+    </div>
   );
 }
 
