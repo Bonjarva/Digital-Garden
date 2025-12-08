@@ -1,5 +1,5 @@
 import React from "react";
-import SeedCard from "../components/_TempSeedCard";
+import SeedCard from "../components/SeedCard";
 
 function Seeds() {
   const seeds = [
