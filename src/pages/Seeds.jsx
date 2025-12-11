@@ -1,5 +1,6 @@
 import React from "react";
 import SeedCard from "../components/SeedCard";
+import AddSeedForm from "../components/AddSeedForm";
 
 function Seeds() {
   const initialSeeds = [
@@ -18,9 +19,15 @@ function Seeds() {
   ];
 
   const [seeds, setSeeds] = React.useState(initialSeeds);
+  const [isFormOpen, setIsFormOpen] = React.useState(false);
 
   return (
     <>
+      <button className="bg-blue-500" onClick={() => setIsFormOpen(true)}>
+        Add Seed
+      </button>
+      {isFormOpen && <AddSeedForm />}
+
       <div className="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {seeds.map((seed, i) => (
           <SeedCard
