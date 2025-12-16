@@ -5,12 +5,14 @@ import AddSeedForm from "../components/AddSeedForm";
 function Seeds() {
   const initialSeeds = [
     {
+      id: 0,
       title: "Learn React",
       description: "Understand components and state",
       dateCreated: "2025-12-09",
       plotId: 1,
     },
     {
+      id: 1,
       title: "Explore Azure",
       description: "Try Cosmos DB and Static Web Apps",
       dateCreated: "2025-12-08",
@@ -19,19 +21,18 @@ function Seeds() {
   ];
 
   function onAddSeed({ title, description }) {
-    setSeeds([
-      ...seeds,
-      {
-        title,
-        description,
-        dateCreated: new Date().toISOString(),
-      },
-    ]);
+    const newSeed = {
+      id: Date.now(),
+      title,
+      description,
+      dateCreated: new Date().toISOString(),
+    };
+    setSeeds([...seeds, newSeed]);
     setIsFormOpen(false);
   }
 
   function onDeleteSeed(seedId) {
-    setSeeds(seeds.filter((_, index) => index !== seedId));
+    setSeeds(seeds.filter((seed) => seed.id !== seedId));
   }
 
   const [seeds, setSeeds] = React.useState(initialSeeds);
@@ -52,12 +53,12 @@ function Seeds() {
       <div className="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {seeds.map((seed, i) => (
           <SeedCard
-            key={i}
+            key={seed.id}
             title={seed.title}
             description={seed.description}
             dateCreated={seed.dateCreated}
             onEdit={() => console.log("Editing:", seed.title)}
-            onDelete={() => onDeleteSeed(i)}
+            onDelete={() => onDeleteSeed(seed.id)}
           />
         ))}
       </div>
