@@ -1,20 +1,39 @@
 import React from "react";
 
-function AddSeedForm() {
+function AddSeedForm({ onAddSeed, setIsFormOpen }) {
+  //  Local state for controlled inputs
+  const [title, setTitle] = React.useState("");
+  const [description, setDescription] = React.useState("");
+
+  // Handle form submission
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    // Call the parent function to add seed
+    onAddSeed({ title, description });
+  };
+
   return (
     <>
       <div className="bg-white-500 p-6 mb-4 rounded-lg shadow-lg">
         <h1 className="text-3xl font-bold mb-4">Add new Seed</h1>
-        <form
-          className="flex flex-col space-y-4"
-          onSubmit={() =>
-            console.log({ seed_name, seed_description, seed_plot_id })
-          }
-        >
+        <form className="flex flex-col space-y-4" onSubmit={handleSubmit}>
           <label htmlFor="seed_name">Seed Name</label>
-          <input className="" type="text" id="seed_name" name="seed_name" />
+          <input
+            type="text"
+            id="seed_name"
+            name="seed_name"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
           <label htmlFor="seed_description">Seed Description</label>
-          <input type="text" id="seed_description" name="seed_description" />
+          <textarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder="Enter seed description"
+            id="seed_description"
+            name="seed_description"
+          />
           <label htmlFor="seed_plot_id">Linked Plot ID</label>
           <input type="text" id="seed_plot_id" name="seed_plot_id" />
           <button
@@ -24,6 +43,7 @@ function AddSeedForm() {
             Add Seed
           </button>
           <button
+            type="button"
             className="px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
             onClick={() => setIsFormOpen(false)}
           >
