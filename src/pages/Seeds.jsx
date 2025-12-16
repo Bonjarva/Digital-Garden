@@ -30,6 +30,10 @@ function Seeds() {
     setIsFormOpen(false);
   }
 
+  function onDeleteSeed(seedId) {
+    setSeeds(seeds.filter((_, index) => index !== seedId));
+  }
+
   const [seeds, setSeeds] = React.useState(initialSeeds);
   const [isFormOpen, setIsFormOpen] = React.useState(false);
 
@@ -53,7 +57,7 @@ function Seeds() {
             description={seed.description}
             dateCreated={seed.dateCreated}
             onEdit={() => console.log("Editing:", seed.title)}
-            onDelete={() => console.log("Deleting:", seed.title)}
+            onDelete={() => onDeleteSeed(i)}
           />
         ))}
       </div>
