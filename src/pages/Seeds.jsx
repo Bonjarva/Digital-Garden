@@ -20,6 +20,11 @@ function Seeds() {
     },
   ];
 
+  function closeForm() {
+    setIsFormOpen(false);
+    setEditingSeed(null);
+  }
+
   function onAddSeed({ title, description }) {
     const newSeed = {
       id: Date.now(),
@@ -28,7 +33,7 @@ function Seeds() {
       dateCreated: new Date().toISOString(),
     };
     setSeeds([...seeds, newSeed]);
-    setIsFormOpen(false);
+    closeForm();
   }
 
   function onDeleteSeed(seedId) {
@@ -51,7 +56,7 @@ function Seeds() {
         <AddSeedForm
           onAddSeed={onAddSeed}
           initialSeed={editingSeed}
-          setIsFormOpen={setIsFormOpen}
+          closeForm={closeForm}
         />
       )}
 
