@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 
 function AddSeedForm({
   onAddSeed,
@@ -17,6 +17,11 @@ function AddSeedForm({
   );
 
   const isEditMode = Boolean(initialSeed);
+
+  const titleInputRef = useRef(null);
+  useEffect(() => {
+    titleInputRef.current?.focus();
+  }, []);
 
   // Handle form submission
   const handleSubmit = (e) => {
@@ -45,6 +50,7 @@ function AddSeedForm({
           <span className="text-sm font-medium text-gray-700">Seed Name</span>
           <input
             type="text"
+            ref={titleInputRef}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
