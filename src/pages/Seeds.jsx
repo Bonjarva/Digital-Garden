@@ -3,6 +3,12 @@ import SeedCard from "../components/SeedCard";
 import AddSeedForm from "../components/AddSeedForm";
 
 function Seeds() {
+  const initialPlots = [
+    { id: 1, name: "Frontend" },
+    { id: 2, name: "Cloud" },
+    { id: 3, name: "Career" },
+  ];
+
   const initialSeeds = [
     {
       id: 0,
@@ -50,6 +56,7 @@ function Seeds() {
   const [seeds, setSeeds] = React.useState(initialSeeds);
   const [isFormOpen, setIsFormOpen] = React.useState(false);
   const [editingSeed, setEditingSeed] = React.useState(null);
+  const [plots] = React.useState(initialPlots);
 
   return (
     <>
