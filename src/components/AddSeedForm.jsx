@@ -16,6 +16,8 @@ function AddSeedForm({
     initialSeed ? initialSeed.plotId : plots[0]?.id
   );
 
+  const isEditMode = Boolean(initialSeed);
+
   // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -35,7 +37,10 @@ function AddSeedForm({
   return (
     <>
       <div className="bg-white-500 p-6 mb-4 rounded-lg shadow-lg">
-        <h1 className="text-3xl font-bold mb-4">Add new Seed</h1>
+        <h2 className="text-lg font-semibold">
+          {isEditMode ? "Edit Seed" : "Add Seed"}
+        </h2>
+
         <form className="flex flex-col space-y-4" onSubmit={handleSubmit}>
           <label className="block">
             <span className="text-sm font-medium text-gray-700">Seed Name</span>
@@ -73,12 +78,14 @@ function AddSeedForm({
               ))}
             </select>
           </label>
+
           <button
             className="px-3 py-1 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
             type="submit"
           >
-            Add Seed
+            {isEditMode ? "Save Changes" : "Add Seed"}
           </button>
+
           <button
             type="button"
             className="px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
