@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import SeedCard from "../components/SeedCard";
 import AddSeedForm from "../components/AddSeedForm";
 
@@ -70,6 +70,34 @@ function Seeds() {
       ? seeds
       : seeds.filter((seed) => seed.plotId === Number(selectedPlotId));
 
+  useEffect(() => {
+    if (!isFormOpen) return;
+
+    function handleKeyDown(e) {
+      if (e.key === "Escape") {
+        closeForm();
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isFormOpen]);
+
+  useEffect(() => {
+    if (isFormOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isFormOpen]);
+
   return (
     <>
       <button
@@ -79,13 +107,23 @@ function Seeds() {
         Add Seed
       </button>
       {isFormOpen && (
-        <AddSeedForm
-          onAddSeed={onAddSeed}
-          onUpdateSeed={onUpdateSeed}
-          initialSeed={editingSeed}
-          closeForm={closeForm}
-          plots={plots}
-        />
+        <div
+          className="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
+          onClick={() => closeForm()}
+        >
+          <div
+            className="bg-white rounded-lg shadow-lg w-full max-w-md p-6"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <AddSeedForm
+              onAddSeed={onAddSeed}
+              onUpdateSeed={onUpdateSeed}
+              initialSeed={editingSeed}
+              closeForm={closeForm}
+              plots={plots}
+            />
+          </div>
+        </div>
       )}
       <div className="mb-4">
         <label className="mr-2 text-sm font-medium">Filter by plot:</label>
