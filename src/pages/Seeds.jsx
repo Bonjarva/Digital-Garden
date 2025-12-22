@@ -36,6 +36,13 @@ function Seeds() {
     closeForm();
   }
 
+  function onUpdateSeed(updatedSeed) {
+    setSeeds(
+      seeds.map((seed) => (seed.id === updatedSeed.id ? updatedSeed : seed))
+    );
+    closeForm();
+  }
+
   function onDeleteSeed(seedId) {
     setSeeds(seeds.filter((seed) => seed.id !== seedId));
   }
@@ -55,6 +62,7 @@ function Seeds() {
       {isFormOpen && (
         <AddSeedForm
           onAddSeed={onAddSeed}
+          onUpdateSeed={onUpdateSeed}
           initialSeed={editingSeed}
           closeForm={closeForm}
         />

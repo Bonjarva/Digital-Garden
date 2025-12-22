@@ -1,6 +1,6 @@
 import React from "react";
 
-function AddSeedForm({ onAddSeed, initialSeed, closeForm }) {
+function AddSeedForm({ onAddSeed, onUpdateSeed, initialSeed, closeForm }) {
   //  Local state for controlled inputs
   const [title, setTitle] = React.useState(initialSeed?.title || "");
   const [description, setDescription] = React.useState(
@@ -11,8 +11,15 @@ function AddSeedForm({ onAddSeed, initialSeed, closeForm }) {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Call the parent function to add seed
-    onAddSeed({ title, description });
+    if (initialSeed) {
+      onUpdateSeed({
+        ...initialSeed,
+        title,
+        description,
+      });
+    } else {
+      onAddSeed({ title, description });
+    }
   };
 
   return (
