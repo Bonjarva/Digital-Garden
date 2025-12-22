@@ -1,9 +1,11 @@
 import React from "react";
 
-function AddSeedForm({ onAddSeed, setIsFormOpen }) {
+function AddSeedForm({ onAddSeed, setIsFormOpen, initialSeed }) {
   //  Local state for controlled inputs
-  const [title, setTitle] = React.useState("");
-  const [description, setDescription] = React.useState("");
+  const [title, setTitle] = React.useState(initialSeed?.title || "");
+  const [description, setDescription] = React.useState(
+    initialSeed?.description || ""
+  );
 
   // Handle form submission
   const handleSubmit = (e) => {

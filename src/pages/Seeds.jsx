@@ -48,7 +48,11 @@ function Seeds() {
         Add Seed
       </button>
       {isFormOpen && (
-        <AddSeedForm onAddSeed={onAddSeed} setIsFormOpen={setIsFormOpen} />
+        <AddSeedForm
+          onAddSeed={onAddSeed}
+          initialSeed={editingSeed}
+          setIsFormOpen={setIsFormOpen}
+        />
       )}
 
       <div className="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
