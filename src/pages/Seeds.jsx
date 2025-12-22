@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import SeedCard from "../components/SeedCard";
 import AddSeedForm from "../components/AddSeedForm";
 
@@ -69,6 +69,22 @@ function Seeds() {
     selectedPlotId === "all"
       ? seeds
       : seeds.filter((seed) => seed.plotId === Number(selectedPlotId));
+
+  useEffect(() => {
+    if (!isFormOpen) return;
+
+    function handleKeyDown(e) {
+      if (e.key === "Escape") {
+        closeForm();
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isFormOpen]);
 
   return (
     <>
