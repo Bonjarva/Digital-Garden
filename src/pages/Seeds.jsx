@@ -31,11 +31,12 @@ function Seeds() {
     setEditingSeed(null);
   }
 
-  function onAddSeed({ title, description }) {
+  function onAddSeed({ title, description, plotId }) {
     const newSeed = {
       id: Date.now(),
       title,
       description,
+      plotId,
       dateCreated: new Date().toISOString(),
     };
     setSeeds([...seeds, newSeed]);
@@ -72,6 +73,7 @@ function Seeds() {
           onUpdateSeed={onUpdateSeed}
           initialSeed={editingSeed}
           closeForm={closeForm}
+          plots={plots}
         />
       )}
 
