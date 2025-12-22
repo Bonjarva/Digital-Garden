@@ -79,13 +79,17 @@ function Seeds() {
         Add Seed
       </button>
       {isFormOpen && (
-        <AddSeedForm
-          onAddSeed={onAddSeed}
-          onUpdateSeed={onUpdateSeed}
-          initialSeed={editingSeed}
-          closeForm={closeForm}
-          plots={plots}
-        />
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
+            <AddSeedForm
+              onAddSeed={onAddSeed}
+              onUpdateSeed={onUpdateSeed}
+              initialSeed={editingSeed}
+              closeForm={closeForm}
+              plots={plots}
+            />
+          </div>
+        </div>
       )}
       <div className="mb-4">
         <label className="mr-2 text-sm font-medium">Filter by plot:</label>
