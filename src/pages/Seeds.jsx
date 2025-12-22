@@ -20,6 +20,11 @@ function Seeds() {
     },
   ];
 
+  function closeForm() {
+    setIsFormOpen(false);
+    setEditingSeed(null);
+  }
+
   function onAddSeed({ title, description }) {
     const newSeed = {
       id: Date.now(),
@@ -28,7 +33,14 @@ function Seeds() {
       dateCreated: new Date().toISOString(),
     };
     setSeeds([...seeds, newSeed]);
-    setIsFormOpen(false);
+    closeForm();
+  }
+
+  function onUpdateSeed(updatedSeed) {
+    setSeeds(
+      seeds.map((seed) => (seed.id === updatedSeed.id ? updatedSeed : seed))
+    );
+    closeForm();
   }
 
   function onDeleteSeed(seedId) {
@@ -37,6 +49,7 @@ function Seeds() {
 
   const [seeds, setSeeds] = React.useState(initialSeeds);
   const [isFormOpen, setIsFormOpen] = React.useState(false);
+  const [editingSeed, setEditingSeed] = React.useState(null);
 
   return (
     <>
@@ -47,7 +60,12 @@ function Seeds() {
         Add Seed
       </button>
       {isFormOpen && (
-        <AddSeedForm onAddSeed={onAddSeed} setIsFormOpen={setIsFormOpen} />
+        <AddSeedForm
+          onAddSeed={onAddSeed}
+          onUpdateSeed={onUpdateSeed}
+          initialSeed={editingSeed}
+          closeForm={closeForm}
+        />
       )}
 
       <div className="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -57,7 +75,7 @@ function Seeds() {
             title={seed.title}
             description={seed.description}
             dateCreated={seed.dateCreated}
-            onEdit={() => console.log("Editing:", seed.title)}
+            onEdit={() => (setEditingSeed(seed), setIsFormOpen(true))}
             onDelete={() => onDeleteSeed(seed.id)}
           />
         ))}

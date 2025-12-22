@@ -1,16 +1,25 @@
 import React from "react";
 
-function AddSeedForm({ onAddSeed, setIsFormOpen }) {
+function AddSeedForm({ onAddSeed, onUpdateSeed, initialSeed, closeForm }) {
   //  Local state for controlled inputs
-  const [title, setTitle] = React.useState("");
-  const [description, setDescription] = React.useState("");
+  const [title, setTitle] = React.useState(initialSeed?.title || "");
+  const [description, setDescription] = React.useState(
+    initialSeed?.description || ""
+  );
 
   // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Call the parent function to add seed
-    onAddSeed({ title, description });
+    if (initialSeed) {
+      onUpdateSeed({
+        ...initialSeed,
+        title,
+        description,
+      });
+    } else {
+      onAddSeed({ title, description });
+    }
   };
 
   return (
@@ -25,6 +34,7 @@ function AddSeedForm({ onAddSeed, setIsFormOpen }) {
             name="seed_name"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
+            placeholder="Enter seed name"
           />
           <label htmlFor="seed_description">Seed Description</label>
           <textarea
@@ -35,7 +45,12 @@ function AddSeedForm({ onAddSeed, setIsFormOpen }) {
             name="seed_description"
           />
           <label htmlFor="seed_plot_id">Linked Plot ID</label>
-          <input type="text" id="seed_plot_id" name="seed_plot_id" />
+          <input
+            type="text"
+            id="seed_plot_id"
+            name="seed_plot_id"
+            placeholder="Enter linked plot ID"
+          />
           <button
             className="px-3 py-1 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
             type="submit"
@@ -45,7 +60,7 @@ function AddSeedForm({ onAddSeed, setIsFormOpen }) {
           <button
             type="button"
             className="px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
-            onClick={() => setIsFormOpen(false)}
+            onClick={() => closeForm()}
           >
             Cancel
           </button>
