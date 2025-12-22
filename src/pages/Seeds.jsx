@@ -54,6 +54,11 @@ function Seeds() {
     setSeeds(seeds.filter((seed) => seed.id !== seedId));
   }
 
+  function getPlotName(plotId) {
+    const plot = plots.find((p) => p.id === plotId);
+    return plot ? plot.name : "Unknown";
+  }
+
   const [seeds, setSeeds] = React.useState(initialSeeds);
   const [isFormOpen, setIsFormOpen] = React.useState(false);
   const [editingSeed, setEditingSeed] = React.useState(null);
@@ -98,18 +103,23 @@ function Seeds() {
         </select>
       </div>
 
-      <div className="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredSeeds.map((seed, i) => (
-          <SeedCard
-            key={seed.id}
-            title={seed.title}
-            description={seed.description}
-            dateCreated={seed.dateCreated}
-            onEdit={() => (setEditingSeed(seed), setIsFormOpen(true))}
-            onDelete={() => onDeleteSeed(seed.id)}
-          />
-        ))}
-      </div>
+      {filteredSeeds.length === 0 ? (
+        <p className="text-gray-500 italic">No seeds in this plot yet 🌱</p>
+      ) : (
+        <div className="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredSeeds.map((seed, i) => (
+            <SeedCard
+              key={seed.id}
+              title={seed.title}
+              description={seed.description}
+              dateCreated={seed.dateCreated}
+              plotName={getPlotName(seed.plotId)}
+              onEdit={() => (setEditingSeed(seed), setIsFormOpen(true))}
+              onDelete={() => onDeleteSeed(seed.id)}
+            />
+          ))}
+        </div>
+      )}
     </>
   );
 }
