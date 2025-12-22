@@ -58,7 +58,7 @@ function Seeds() {
             title={seed.title}
             description={seed.description}
             dateCreated={seed.dateCreated}
-            onEdit={() => console.log("Editing:", seed.title)}
+            onEdit={() => (setEditingSeed(seed), setIsFormOpen(true))}
             onDelete={() => onDeleteSeed(seed.id)}
           />
         ))}
