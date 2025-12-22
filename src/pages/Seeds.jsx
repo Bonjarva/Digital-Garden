@@ -86,6 +86,18 @@ function Seeds() {
     };
   }, [isFormOpen]);
 
+  useEffect(() => {
+    if (isFormOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isFormOpen]);
+
   return (
     <>
       <button
