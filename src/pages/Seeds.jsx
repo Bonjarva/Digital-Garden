@@ -79,8 +79,14 @@ function Seeds() {
         Add Seed
       </button>
       {isFormOpen && (
-        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
+        <div
+          className="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
+          onClick={() => closeForm()}
+        >
+          <div
+            className="bg-white rounded-lg shadow-lg w-full max-w-md p-6"
+            onClick={(e) => e.stopPropagation()}
+          >
             <AddSeedForm
               onAddSeed={onAddSeed}
               onUpdateSeed={onUpdateSeed}
