@@ -58,6 +58,12 @@ function Seeds() {
   const [isFormOpen, setIsFormOpen] = React.useState(false);
   const [editingSeed, setEditingSeed] = React.useState(null);
   const [plots] = React.useState(initialPlots);
+  const [selectedPlotId, setSelectedPlotId] = React.useState("all");
+
+  const filteredSeeds =
+    selectedPlotId === "all"
+      ? seeds
+      : seeds.filter((seed) => seed.plotId === Number(selectedPlotId));
 
   return (
     <>
@@ -76,9 +82,24 @@ function Seeds() {
           plots={plots}
         />
       )}
+      <div className="mb-4">
+        <label className="mr-2 text-sm font-medium">Filter by plot:</label>
+        <select
+          value={selectedPlotId}
+          onChange={(e) => setSelectedPlotId(e.target.value)}
+          className="rounded-md border-gray-300 shadow-sm"
+        >
+          <option value="all">All</option>
+          {plots.map((plot) => (
+            <option key={plot.id} value={plot.id}>
+              {plot.name}
+            </option>
+          ))}
+        </select>
+      </div>
 
       <div className="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {seeds.map((seed, i) => (
+        {filteredSeeds.map((seed, i) => (
           <SeedCard
             key={seed.id}
             title={seed.title}
