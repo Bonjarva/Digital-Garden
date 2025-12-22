@@ -37,6 +37,7 @@ function Seeds() {
 
   const [seeds, setSeeds] = React.useState(initialSeeds);
   const [isFormOpen, setIsFormOpen] = React.useState(false);
+  const [editingSeed, setEditingSeed] = React.useState(null);
 
   return (
     <>
