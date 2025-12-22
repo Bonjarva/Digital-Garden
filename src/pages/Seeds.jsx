@@ -3,6 +3,12 @@ import SeedCard from "../components/SeedCard";
 import AddSeedForm from "../components/AddSeedForm";
 
 function Seeds() {
+  const initialPlots = [
+    { id: 1, name: "Frontend" },
+    { id: 2, name: "Cloud" },
+    { id: 3, name: "Career" },
+  ];
+
   const initialSeeds = [
     {
       id: 0,
@@ -25,11 +31,12 @@ function Seeds() {
     setEditingSeed(null);
   }
 
-  function onAddSeed({ title, description }) {
+  function onAddSeed({ title, description, plotId }) {
     const newSeed = {
       id: Date.now(),
       title,
       description,
+      plotId,
       dateCreated: new Date().toISOString(),
     };
     setSeeds([...seeds, newSeed]);
@@ -47,9 +54,21 @@ function Seeds() {
     setSeeds(seeds.filter((seed) => seed.id !== seedId));
   }
 
+  function getPlotName(plotId) {
+    const plot = plots.find((p) => p.id === plotId);
+    return plot ? plot.name : "Unknown";
+  }
+
   const [seeds, setSeeds] = React.useState(initialSeeds);
   const [isFormOpen, setIsFormOpen] = React.useState(false);
   const [editingSeed, setEditingSeed] = React.useState(null);
+  const [plots] = React.useState(initialPlots);
+  const [selectedPlotId, setSelectedPlotId] = React.useState("all");
+
+  const filteredSeeds =
+    selectedPlotId === "all"
+      ? seeds
+      : seeds.filter((seed) => seed.plotId === Number(selectedPlotId));
 
   return (
     <>
@@ -65,21 +84,42 @@ function Seeds() {
           onUpdateSeed={onUpdateSeed}
           initialSeed={editingSeed}
           closeForm={closeForm}
+          plots={plots}
         />
       )}
-
-      <div className="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {seeds.map((seed, i) => (
-          <SeedCard
-            key={seed.id}
-            title={seed.title}
-            description={seed.description}
-            dateCreated={seed.dateCreated}
-            onEdit={() => (setEditingSeed(seed), setIsFormOpen(true))}
-            onDelete={() => onDeleteSeed(seed.id)}
-          />
-        ))}
+      <div className="mb-4">
+        <label className="mr-2 text-sm font-medium">Filter by plot:</label>
+        <select
+          value={selectedPlotId}
+          onChange={(e) => setSelectedPlotId(e.target.value)}
+          className="rounded-md border-gray-300 shadow-sm"
+        >
+          <option value="all">All</option>
+          {plots.map((plot) => (
+            <option key={plot.id} value={plot.id}>
+              {plot.name}
+            </option>
+          ))}
+        </select>
       </div>
+
+      {filteredSeeds.length === 0 ? (
+        <p className="text-gray-500 italic">No seeds in this plot yet 🌱</p>
+      ) : (
+        <div className="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredSeeds.map((seed, i) => (
+            <SeedCard
+              key={seed.id}
+              title={seed.title}
+              description={seed.description}
+              dateCreated={seed.dateCreated}
+              plotName={getPlotName(seed.plotId)}
+              onEdit={() => (setEditingSeed(seed), setIsFormOpen(true))}
+              onDelete={() => onDeleteSeed(seed.id)}
+            />
+          ))}
+        </div>
+      )}
     </>
   );
 }

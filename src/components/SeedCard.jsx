@@ -2,8 +2,15 @@
 import React from "react";
 
 // Think: what props should this component accept?
-// Hint: title, description, dateCreated, onEdit, onDelete
-function SeedCard({ title, description, dateCreated, onEdit, onDelete }) {
+// Hint: title, description, dateCreated, plotName, onEdit, onDelete
+function SeedCard({
+  title,
+  description,
+  dateCreated,
+  plotName,
+  onEdit,
+  onDelete,
+}) {
   return (
     <div className="bg-white shadow-md rounded-2xl p-4 flex flex-col gap-2 hover:shadow-lg transition-shadow">
       {/* Tailwind: card container with padding, shadow, rounded corners */}
@@ -11,6 +18,8 @@ function SeedCard({ title, description, dateCreated, onEdit, onDelete }) {
       <h2 className="text-xl font-bold text-gray-800">{title}</h2>
 
       <p className="text-gray-600">{description}</p>
+
+      <p className="text-xs text-gray-500 mb-2">Plot: {plotName}</p>
 
       <small className="text-gray-400 text-sm">
         Created on: {new Date(dateCreated).toLocaleDateString()}
