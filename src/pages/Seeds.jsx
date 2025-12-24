@@ -34,21 +34,32 @@ function Seeds() {
   }
 
   async function onAddSeed({ title, description, plotId }) {
+    setIsSaving(true);
+
     const newSeed = await createSeed({ title, description, plotId });
 
     setSeeds([...seeds, newSeed]);
+    setIsSaving(false);
+
     closeForm();
   }
 
   async function onUpdateSeed(updatedSeed) {
+    setIsSaving(true);
+
     const updatedSeeds = await updateSeed(seeds, updatedSeed);
     setSeeds(updatedSeeds);
+    setIsSaving(false);
+
     closeForm();
   }
 
   async function onDeleteSeed(seedId) {
+    setIsSaving(true);
+
     const updatedSeeds = await deleteSeed(seeds, seedId);
     setSeeds(updatedSeeds);
+    setIsSaving(false);
   }
 
   function getPlotName(plotId) {
@@ -61,6 +72,7 @@ function Seeds() {
   const [editingSeed, setEditingSeed] = React.useState(null);
   const [plots] = React.useState(initialPlots);
   const [selectedPlotId, setSelectedPlotId] = React.useState("all");
+  const [isSaving, setIsSaving] = React.useState(false);
 
   const filteredSeeds =
     selectedPlotId === "all"
@@ -118,6 +130,7 @@ function Seeds() {
               initialSeed={editingSeed}
               closeForm={closeForm}
               plots={plots}
+              isSaving={isSaving}
             />
           </div>
         </div>
