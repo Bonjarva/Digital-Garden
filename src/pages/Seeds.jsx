@@ -33,22 +33,49 @@ function Seeds() {
     setEditingSeed(null);
   }
 
-  function onAddSeed({ title, description, plotId }) {
-    const newSeed = createSeed({ title, description, plotId });
+  async function onAddSeed({ title, description, plotId }) {
+    setIsSaving(true);
 
-    setSeeds([...seeds, newSeed]);
-    closeForm();
+    try {
+      const newSeed = await createSeed({ title, description, plotId });
+
+      setSeeds([...seeds, newSeed]);
+      setModalError(null);
+      closeForm();
+    } catch (err) {
+      setModalError(err.message);
+    } finally {
+      setIsSaving(false);
+    }
   }
 
-  function onUpdateSeed(updatedSeed) {
-    const updatedSeeds = updateSeed(seeds, updatedSeed);
-    setSeeds(updatedSeeds);
-    closeForm();
+  async function onUpdateSeed(updatedSeed) {
+    setIsSaving(true);
+
+    try {
+      const updatedSeeds = await updateSeed(seeds, updatedSeed);
+      setSeeds(updatedSeeds);
+      setModalError(null);
+      closeForm();
+    } catch (err) {
+      setModalError(err.message);
+    } finally {
+      setIsSaving(false);
+    }
   }
 
-  function onDeleteSeed(seedId) {
-    const updatedSeeds = deleteSeed(seeds, seedId);
-    setSeeds(updatedSeeds);
+  async function onDeleteSeed(seedId) {
+    setIsSaving(true);
+
+    try {
+      const updatedSeeds = await deleteSeed(seeds, seedId);
+      setSeeds(updatedSeeds);
+      setPageError(null);
+    } catch (err) {
+      setPageError(err.message);
+    } finally {
+      setIsSaving(false);
+    }
   }
 
   function getPlotName(plotId) {
@@ -61,6 +88,9 @@ function Seeds() {
   const [editingSeed, setEditingSeed] = React.useState(null);
   const [plots] = React.useState(initialPlots);
   const [selectedPlotId, setSelectedPlotId] = React.useState("all");
+  const [isSaving, setIsSaving] = React.useState(false);
+  const [pageError, setPageError] = React.useState(null);
+  const [modalError, setModalError] = React.useState(null);
 
   const filteredSeeds =
     selectedPlotId === "all"
@@ -118,8 +148,15 @@ function Seeds() {
               initialSeed={editingSeed}
               closeForm={closeForm}
               plots={plots}
+              isSaving={isSaving}
+              error={modalError}
             />
           </div>
+        </div>
+      )}
+      {pageError && (
+        <div className="mb-4 rounded bg-red-100 text-red-700 px-4 py-2">
+          {pageError}
         </div>
       )}
       <div className="mb-4">

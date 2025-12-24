@@ -6,6 +6,8 @@ function AddSeedForm({
   initialSeed,
   closeForm,
   plots,
+  isSaving,
+  error,
 }) {
   //  Local state for controlled inputs
   const [title, setTitle] = React.useState(initialSeed?.title || "");
@@ -41,6 +43,12 @@ function AddSeedForm({
 
   return (
     <>
+      {error && (
+        <div className="mb-4 rounded bg-red-100 text-red-700 px-3 py-2 text-sm">
+          {error}
+        </div>
+      )}
+
       <h2 className="text-lg font-semibold">
         {isEditMode ? "Edit Seed" : "Add Seed"}
       </h2>
@@ -87,13 +95,15 @@ function AddSeedForm({
         <button
           className="px-3 py-1 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
           type="submit"
+          disabled={isSaving}
         >
-          {isEditMode ? "Save Changes" : "Add Seed"}
+          {isSaving ? "Saving..." : isEditMode ? "Save Changes" : "Add Seed"}
         </button>
 
         <button
           type="button"
           className="px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+          disabled={isSaving}
           onClick={() => closeForm()}
         >
           Cancel
