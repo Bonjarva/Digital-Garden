@@ -1,4 +1,6 @@
 import React, { useEffect } from "react";
+import { createSeed, updateSeed, deleteSeed } from "../services/seedService";
+
 import SeedCard from "../components/SeedCard";
 import AddSeedForm from "../components/AddSeedForm";
 
@@ -32,26 +34,21 @@ function Seeds() {
   }
 
   function onAddSeed({ title, description, plotId }) {
-    const newSeed = {
-      id: Date.now(),
-      title,
-      description,
-      plotId,
-      dateCreated: new Date().toISOString(),
-    };
+    const newSeed = createSeed({ title, description, plotId });
+
     setSeeds([...seeds, newSeed]);
     closeForm();
   }
 
   function onUpdateSeed(updatedSeed) {
-    setSeeds(
-      seeds.map((seed) => (seed.id === updatedSeed.id ? updatedSeed : seed))
-    );
+    const updatedSeeds = updateSeed(seeds, updatedSeed);
+    setSeeds(updatedSeeds);
     closeForm();
   }
 
   function onDeleteSeed(seedId) {
-    setSeeds(seeds.filter((seed) => seed.id !== seedId));
+    const updatedSeeds = deleteSeed(seeds, seedId);
+    setSeeds(updatedSeeds);
   }
 
   function getPlotName(plotId) {
