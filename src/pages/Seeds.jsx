@@ -36,30 +36,46 @@ function Seeds() {
   async function onAddSeed({ title, description, plotId }) {
     setIsSaving(true);
 
-    const newSeed = await createSeed({ title, description, plotId });
+    try {
+      const newSeed = await createSeed({ title, description, plotId });
 
-    setSeeds([...seeds, newSeed]);
-    setIsSaving(false);
-
-    closeForm();
+      setSeeds([...seeds, newSeed]);
+      setError(null);
+      closeForm();
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsSaving(false);
+    }
   }
 
   async function onUpdateSeed(updatedSeed) {
     setIsSaving(true);
 
-    const updatedSeeds = await updateSeed(seeds, updatedSeed);
-    setSeeds(updatedSeeds);
-    setIsSaving(false);
-
-    closeForm();
+    try {
+      const updatedSeeds = await updateSeed(seeds, updatedSeed);
+      setSeeds(updatedSeeds);
+      setError(null);
+      closeForm();
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsSaving(false);
+    }
   }
 
   async function onDeleteSeed(seedId) {
     setIsSaving(true);
 
-    const updatedSeeds = await deleteSeed(seeds, seedId);
-    setSeeds(updatedSeeds);
-    setIsSaving(false);
+    try {
+      const updatedSeeds = await deleteSeed(seeds, seedId);
+      setSeeds(updatedSeeds);
+      setError(null);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsSaving(false);
+    }
   }
 
   function getPlotName(plotId) {
@@ -73,6 +89,7 @@ function Seeds() {
   const [plots] = React.useState(initialPlots);
   const [selectedPlotId, setSelectedPlotId] = React.useState("all");
   const [isSaving, setIsSaving] = React.useState(false);
+  const [error, setError] = React.useState(null);
 
   const filteredSeeds =
     selectedPlotId === "all"
@@ -115,6 +132,11 @@ function Seeds() {
       >
         Add Seed
       </button>
+      {error && (
+        <div className="mb-4 rounded bg-red-100 text-red-700 px-4 py-2">
+          {error}
+        </div>
+      )}
       {isFormOpen && (
         <div
           className="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
