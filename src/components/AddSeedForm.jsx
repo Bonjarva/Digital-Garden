@@ -7,6 +7,7 @@ function AddSeedForm({
   closeForm,
   plots,
   isSaving,
+  error,
 }) {
   //  Local state for controlled inputs
   const [title, setTitle] = React.useState(initialSeed?.title || "");
@@ -42,6 +43,12 @@ function AddSeedForm({
 
   return (
     <>
+      {error && (
+        <div className="mb-4 rounded bg-red-100 text-red-700 px-3 py-2 text-sm">
+          {error}
+        </div>
+      )}
+
       <h2 className="text-lg font-semibold">
         {isEditMode ? "Edit Seed" : "Add Seed"}
       </h2>

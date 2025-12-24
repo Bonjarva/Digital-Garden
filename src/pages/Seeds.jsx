@@ -40,10 +40,10 @@ function Seeds() {
       const newSeed = await createSeed({ title, description, plotId });
 
       setSeeds([...seeds, newSeed]);
-      setError(null);
+      setModalError(null);
       closeForm();
     } catch (err) {
-      setError(err.message);
+      setModalError(err.message);
     } finally {
       setIsSaving(false);
     }
@@ -55,10 +55,10 @@ function Seeds() {
     try {
       const updatedSeeds = await updateSeed(seeds, updatedSeed);
       setSeeds(updatedSeeds);
-      setError(null);
+      setModalError(null);
       closeForm();
     } catch (err) {
-      setError(err.message);
+      setModalError(err.message);
     } finally {
       setIsSaving(false);
     }
@@ -70,9 +70,9 @@ function Seeds() {
     try {
       const updatedSeeds = await deleteSeed(seeds, seedId);
       setSeeds(updatedSeeds);
-      setError(null);
+      setPageError(null);
     } catch (err) {
-      setError(err.message);
+      setPageError(err.message);
     } finally {
       setIsSaving(false);
     }
@@ -89,7 +89,8 @@ function Seeds() {
   const [plots] = React.useState(initialPlots);
   const [selectedPlotId, setSelectedPlotId] = React.useState("all");
   const [isSaving, setIsSaving] = React.useState(false);
-  const [error, setError] = React.useState(null);
+  const [pageError, setPageError] = React.useState(null);
+  const [modalError, setModalError] = React.useState(null);
 
   const filteredSeeds =
     selectedPlotId === "all"
@@ -132,11 +133,6 @@ function Seeds() {
       >
         Add Seed
       </button>
-      {error && (
-        <div className="mb-4 rounded bg-red-100 text-red-700 px-4 py-2">
-          {error}
-        </div>
-      )}
       {isFormOpen && (
         <div
           className="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
@@ -153,8 +149,14 @@ function Seeds() {
               closeForm={closeForm}
               plots={plots}
               isSaving={isSaving}
+              error={modalError}
             />
           </div>
+        </div>
+      )}
+      {pageError && (
+        <div className="mb-4 rounded bg-red-100 text-red-700 px-4 py-2">
+          {pageError}
         </div>
       )}
       <div className="mb-4">
