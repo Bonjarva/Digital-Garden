@@ -1,4 +1,4 @@
-export function createSeed({ title, description, plotId }) {
+export async function createSeed({ title, description, plotId }) {
   return {
     id: Date.now(),
     title,
@@ -8,10 +8,10 @@ export function createSeed({ title, description, plotId }) {
   };
 }
 
-export function updateSeed(seeds, updatedSeed) {
+export async function updateSeed(seeds, updatedSeed) {
   return seeds.map((seed) => (seed.id === updatedSeed.id ? updatedSeed : seed));
 }
 
-export function deleteSeed(seeds, seedId) {
+export async function deleteSeed(seeds, seedId) {
   return seeds.filter((seed) => seed.id !== seedId);
 }

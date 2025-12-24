@@ -33,21 +33,21 @@ function Seeds() {
     setEditingSeed(null);
   }
 
-  function onAddSeed({ title, description, plotId }) {
-    const newSeed = createSeed({ title, description, plotId });
+  async function onAddSeed({ title, description, plotId }) {
+    const newSeed = await createSeed({ title, description, plotId });
 
     setSeeds([...seeds, newSeed]);
     closeForm();
   }
 
-  function onUpdateSeed(updatedSeed) {
-    const updatedSeeds = updateSeed(seeds, updatedSeed);
+  async function onUpdateSeed(updatedSeed) {
+    const updatedSeeds = await updateSeed(seeds, updatedSeed);
     setSeeds(updatedSeeds);
     closeForm();
   }
 
-  function onDeleteSeed(seedId) {
-    const updatedSeeds = deleteSeed(seeds, seedId);
+  async function onDeleteSeed(seedId) {
+    const updatedSeeds = await deleteSeed(seeds, seedId);
     setSeeds(updatedSeeds);
   }
 
