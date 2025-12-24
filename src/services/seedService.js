@@ -8,8 +8,8 @@ export function createSeed({ title, description, plotId }) {
   };
 }
 
-export function updateSeed(seed) {
-  // logic will go here
+export function updateSeed(seeds, updatedSeed) {
+  return seeds.map((seed) => (seed.id === updatedSeed.id ? updatedSeed : seed));
 }
 
 export function deleteSeed(seeds, seedId) {

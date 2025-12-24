@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { createSeed } from "../services/seedService";
+import { createSeed, updateSeed } from "../services/seedService";
 
 import SeedCard from "../components/SeedCard";
 import AddSeedForm from "../components/AddSeedForm";
@@ -41,9 +41,8 @@ function Seeds() {
   }
 
   function onUpdateSeed(updatedSeed) {
-    setSeeds(
-      seeds.map((seed) => (seed.id === updatedSeed.id ? updatedSeed : seed))
-    );
+    const updatedSeeds = updateSeed(seeds, updatedSeed);
+    setSeeds(updatedSeeds);
     closeForm();
   }
 
