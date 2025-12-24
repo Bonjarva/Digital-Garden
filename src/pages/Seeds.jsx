@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { createSeed, updateSeed } from "../services/seedService";
+import { createSeed, updateSeed, deleteSeed } from "../services/seedService";
 
 import SeedCard from "../components/SeedCard";
 import AddSeedForm from "../components/AddSeedForm";
@@ -47,7 +47,8 @@ function Seeds() {
   }
 
   function onDeleteSeed(seedId) {
-    setSeeds(seeds.filter((seed) => seed.id !== seedId));
+    const updatedSeeds = deleteSeed(seeds, seedId);
+    setSeeds(updatedSeeds);
   }
 
   function getPlotName(plotId) {

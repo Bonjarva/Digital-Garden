@@ -13,5 +13,5 @@ export function updateSeed(seeds, updatedSeed) {
 }
 
 export function deleteSeed(seeds, seedId) {
-  // logic will go here
+  return seeds.filter((seed) => seed.id !== seedId);
 }
