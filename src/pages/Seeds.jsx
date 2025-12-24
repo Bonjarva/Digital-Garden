@@ -1,4 +1,6 @@
 import React, { useEffect } from "react";
+import { createSeed } from "../services/seedService";
+
 import SeedCard from "../components/SeedCard";
 import AddSeedForm from "../components/AddSeedForm";
 
@@ -32,13 +34,8 @@ function Seeds() {
   }
 
   function onAddSeed({ title, description, plotId }) {
-    const newSeed = {
-      id: Date.now(),
-      title,
-      description,
-      plotId,
-      dateCreated: new Date().toISOString(),
-    };
+    const newSeed = createSeed({ title, description, plotId });
+
     setSeeds([...seeds, newSeed]);
     closeForm();
   }

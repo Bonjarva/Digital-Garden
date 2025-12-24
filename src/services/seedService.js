@@ -1,5 +1,11 @@
 export function createSeed({ title, description, plotId }) {
-  // logic will go here
+  return {
+    id: Date.now(),
+    title,
+    description,
+    plotId,
+    dateCreated: new Date().toISOString(),
+  };
 }
 
 export function updateSeed(seed) {
