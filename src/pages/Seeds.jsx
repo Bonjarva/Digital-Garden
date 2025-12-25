@@ -11,23 +11,6 @@ function Seeds() {
     { id: 3, name: "Career" },
   ];
 
-  const initialSeeds = [
-    {
-      id: 0,
-      title: "Learn React",
-      description: "Understand components and state",
-      dateCreated: "2025-12-09",
-      plotId: 1,
-    },
-    {
-      id: 1,
-      title: "Explore Azure",
-      description: "Try Cosmos DB and Static Web Apps",
-      dateCreated: "2025-12-08",
-      plotId: 2,
-    },
-  ];
-
   function closeForm() {
     setIsFormOpen(false);
     setEditingSeed(null);
@@ -78,25 +61,30 @@ function Seeds() {
     }
   }
 
+  // Helper to get plot name by id
   function getPlotName(plotId) {
     const plot = plots.find((p) => p.id === plotId);
     return plot ? plot.name : "Unknown";
   }
 
-  const [seeds, setSeeds] = React.useState(initialSeeds);
+  const [seeds, setSeeds] = React.useState([]);
   const [isFormOpen, setIsFormOpen] = React.useState(false);
   const [editingSeed, setEditingSeed] = React.useState(null);
   const [plots] = React.useState(initialPlots);
   const [selectedPlotId, setSelectedPlotId] = React.useState("all");
   const [isSaving, setIsSaving] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(true);
+
   const [pageError, setPageError] = React.useState(null);
   const [modalError, setModalError] = React.useState(null);
 
+  // Filter seeds based on selected plot
   const filteredSeeds =
     selectedPlotId === "all"
       ? seeds
       : seeds.filter((seed) => seed.plotId === Number(selectedPlotId));
 
+  // Handle Escape key to close modal
   useEffect(() => {
     if (!isFormOpen) return;
 
@@ -113,6 +101,7 @@ function Seeds() {
     };
   }, [isFormOpen]);
 
+  // Prevent background scrolling when modal is open
   useEffect(() => {
     if (isFormOpen) {
       document.body.style.overflow = "hidden";
@@ -124,6 +113,32 @@ function Seeds() {
       document.body.style.overflow = "";
     };
   }, [isFormOpen]);
+
+  // Load seeds on component mount
+  React.useEffect(() => {
+    async function loadSeeds() {
+      try {
+        setIsLoading(true);
+        setPageError(null);
+
+        const response = await fetch("/api/listSeeds");
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch seeds");
+        }
+
+        const data = await response.json();
+
+        setSeeds(data);
+      } catch (err) {
+        setPageError(err.message);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    loadSeeds();
+  }, []);
 
   return (
     <>
@@ -159,6 +174,7 @@ function Seeds() {
           {pageError}
         </div>
       )}
+      {isLoading && <p className="p-6 text-gray-500">Loading seeds...</p>}
       <div className="mb-4">
         <label className="mr-2 text-sm font-medium">Filter by plot:</label>
         <select
@@ -175,22 +191,24 @@ function Seeds() {
         </select>
       </div>
 
-      {filteredSeeds.length === 0 ? (
+      {!isLoading && filteredSeeds.length === 0 ? (
         <p className="text-gray-500 italic">No seeds in this plot yet 🌱</p>
       ) : (
-        <div className="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredSeeds.map((seed, i) => (
-            <SeedCard
-              key={seed.id}
-              title={seed.title}
-              description={seed.description}
-              dateCreated={seed.dateCreated}
-              plotName={getPlotName(seed.plotId)}
-              onEdit={() => (setEditingSeed(seed), setIsFormOpen(true))}
-              onDelete={() => onDeleteSeed(seed.id)}
-            />
-          ))}
-        </div>
+        !isLoading && (
+          <div className="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredSeeds.map((seed, i) => (
+              <SeedCard
+                key={seed.id}
+                title={seed.title}
+                description={seed.description}
+                dateCreated={seed.dateCreated}
+                plotName={getPlotName(seed.plotId)}
+                onEdit={() => (setEditingSeed(seed), setIsFormOpen(true))}
+                onDelete={() => onDeleteSeed(seed.id)}
+              />
+            ))}
+          </div>
+        )
       )}
     </>
   );
