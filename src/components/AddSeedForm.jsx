@@ -30,7 +30,7 @@ function AddSeedForm({
     e.preventDefault();
 
     if (initialSeed) {
-      onUpdateSeed({
+      await onUpdateSeed({
         ...initialSeed,
         title,
         description,

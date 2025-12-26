@@ -6,11 +6,9 @@ app.http("createSeed", {
   authLevel: "anonymous",
   handler: async (request, context) => {
     context.log(`Http function processed request for url "${request.url}"`);
-    console.log("Request method:", request.method);
 
     try {
       const { title, description, plotId } = await request.json();
-      console.log("Received data:", { title, description, plotId });
 
       if (!title || !description) {
         return {

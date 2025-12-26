@@ -16,10 +16,22 @@ function Seeds() {
     setEditingSeed(null);
   }
 
+  const refreshSeeds = async () => {
+    const res = await fetch("/api/listSeeds");
+    if (!res.ok) throw new Error("Failed to fetch seeds");
+    const data = await res.json();
+    setSeeds(data); // data is the array
+  };
+
   async function onAddSeed({ title, description, plotId }) {
     try {
       setIsSaving(true);
       setPageError(null);
+
+      if (!title || !description) {
+        setModalError("Title and description are required");
+        return;
+      }
 
       const response = await fetch("/api/createSeed", {
         method: "POST",
@@ -32,10 +44,7 @@ function Seeds() {
         throw new Error(err.error || "Failed to create seed");
       }
 
-      const newSeed = await response.json();
-
-      // Add new seed to state
-      setSeeds([...seeds, newSeed]);
+      await refreshSeeds(); // update state from backend
 
       setModalError(null);
       closeForm();
@@ -49,11 +58,27 @@ function Seeds() {
   }
 
   async function onUpdateSeed(updatedSeed) {
-    setIsSaving(true);
-
     try {
-      const updatedSeeds = await updateSeed(seeds, updatedSeed);
-      setSeeds(updatedSeeds);
+      setIsSaving(true);
+      setPageError(null);
+
+      if (!updatedSeed.title || !updatedSeed.description) {
+        setModalError("Title and description are required");
+        return;
+      }
+      const response = await fetch("/api/updateSeed", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedSeed),
+      });
+
+      if (!response.ok) {
+        const err = await response.json();
+        throw new Error(err.error || "Failed to edit seed");
+      }
+
+      await refreshSeeds(); // update state from backend
+
       setModalError(null);
       closeForm();
     } catch (err) {
@@ -95,10 +120,11 @@ function Seeds() {
   const [modalError, setModalError] = React.useState(null);
 
   // Filter seeds based on selected plot
-  const filteredSeeds =
-    selectedPlotId === "all"
+  const filteredSeeds = Array.isArray(seeds)
+    ? selectedPlotId === "all"
       ? seeds
-      : seeds.filter((seed) => seed.plotId === Number(selectedPlotId));
+      : seeds.filter((seed) => seed.plotId === Number(selectedPlotId))
+    : [];
 
   // Handle Escape key to close modal
   useEffect(() => {
@@ -142,7 +168,6 @@ function Seeds() {
         if (!response.ok) {
           throw new Error("Failed to fetch seeds");
         }
-
         const data = await response.json();
 
         setSeeds(data);
