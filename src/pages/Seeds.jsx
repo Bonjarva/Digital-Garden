@@ -17,15 +17,31 @@ function Seeds() {
   }
 
   async function onAddSeed({ title, description, plotId }) {
-    setIsSaving(true);
-
     try {
-      const newSeed = await createSeed({ title, description, plotId });
+      setIsSaving(true);
+      setPageError(null);
 
+      const response = await fetch("/api/createSeed", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title, description, plotId }),
+      });
+
+      if (!response.ok) {
+        const err = await response.json();
+        throw new Error(err.error || "Failed to create seed");
+      }
+
+      const newSeed = await response.json();
+
+      // Add new seed to state
       setSeeds([...seeds, newSeed]);
+
       setModalError(null);
       closeForm();
     } catch (err) {
+      console.error(err);
+
       setModalError(err.message);
     } finally {
       setIsSaving(false);
