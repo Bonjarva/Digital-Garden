@@ -26,18 +26,18 @@ function AddSeedForm({
   }, []);
 
   // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (initialSeed) {
-      onUpdateSeed({
+      await onUpdateSeed({
         ...initialSeed,
         title,
         description,
         plotId,
       });
     } else {
-      onAddSeed({ title, description, plotId });
+      await onAddSeed({ title, description, plotId });
     }
   };
 
