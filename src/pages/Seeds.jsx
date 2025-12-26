@@ -89,11 +89,28 @@ function Seeds() {
   }
 
   async function onDeleteSeed(seedId) {
-    setIsSaving(true);
-
     try {
-      const updatedSeeds = await deleteSeed(seeds, seedId);
-      setSeeds(updatedSeeds);
+      setIsSaving(true);
+      setPageError(null);
+
+      if (!seedId) {
+        setPageError("Seed ID is required");
+        return;
+      }
+
+      const response = await fetch("/api/deleteSeed", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: seedId }),
+      });
+
+      if (!response.ok) {
+        const err = await response.json();
+        throw new Error(err.error || "Failed to delete seed");
+      }
+
+      await refreshSeeds(); // update state from backend
+
       setPageError(null);
     } catch (err) {
       setPageError(err.message);
