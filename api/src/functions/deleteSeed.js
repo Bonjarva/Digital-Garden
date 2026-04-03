@@ -4,7 +4,6 @@ const { container, ensureReady } = require("../cosmosClient");
 app.http("deleteSeed", {
   methods: ["DELETE"],
   authLevel: "anonymous",
-  route: "deleteSeed",
   handler: async (request, context) => {
     try {
       await ensureReady();

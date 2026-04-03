@@ -4,7 +4,6 @@ const { container, ensureReady } = require("../cosmosClient");
 app.http("createSeed", {
   methods: ["POST"],
   authLevel: "anonymous",
-  route: "createSeed",
   handler: async (request, context) => {
     context.log(`Http function processed request for url "${request.url}"`);
 
