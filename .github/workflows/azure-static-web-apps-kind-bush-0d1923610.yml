@@ -30,7 +30,7 @@ jobs:
 
           #### Repository/Build Configurations ####
           app_location: "/" # React project lives in root
-          api_location: "" # No API yet
+          api_location: "api" # Azure Functions live in /api
           output_location: "dist" # React build output
           app_build_command: "npm run build"
           #### End Config ###
