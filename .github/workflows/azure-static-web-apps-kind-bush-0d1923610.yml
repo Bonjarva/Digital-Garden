@@ -10,19 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     name: Build and Deploy Job
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           submodules: true
           lfs: false
-
-      # ⭐ Install dependencies before building
-      - name: Install Frontend Dependencies
-        run: npm install
-        working-directory: ./
-
-      - name: Install API Dependencies
-        run: npm install
-        working-directory: ./api
 
       - name: Build And Deploy
         id: builddeploy
