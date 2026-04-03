@@ -4,6 +4,7 @@ const { container } = require("../cosmosClient");
 app.http("deleteSeed", {
   methods: ["DELETE"],
   authLevel: "anonymous",
+  route: "deleteSeed",
   handler: async (request, context) => {
     try {
       let body;
