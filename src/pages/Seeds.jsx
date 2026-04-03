@@ -177,9 +177,19 @@ function Seeds() {
       setPageError(null);
 
       const response = await fetch("/api/listSeeds");
-
+      
       if (!response.ok) {
-        throw new Error("Failed to fetch seeds from the server. Check your connection or the API state.");
+        let errorMessage = "Failed to fetch seeds from the server. Check your connection or the API state.";
+        try {
+          const errData = await response.json();
+          if (errData && errData.error) {
+            errorMessage = errData.error;
+          }
+        } catch (e) {
+          // If not JSON, use default or response.statusText
+          errorMessage += ` (Status: ${response.status} ${response.statusText})`;
+        }
+        throw new Error(errorMessage);
       }
       const data = await response.json();
 

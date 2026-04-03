@@ -1,5 +1,5 @@
 const { app } = require("@azure/functions");
-const { container } = require("../cosmosClient");
+const { container, ensureReady } = require("../cosmosClient");
 
 app.http("deleteSeed", {
   methods: ["DELETE"],
@@ -7,6 +7,7 @@ app.http("deleteSeed", {
   route: "deleteSeed",
   handler: async (request, context) => {
     try {
+      await ensureReady();
       let body;
       try {
         body = await request.json();

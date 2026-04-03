@@ -1,5 +1,5 @@
 const { app } = require("@azure/functions");
-const { container } = require("../cosmosClient");
+const { container, ensureReady } = require("../cosmosClient");
 
 app.http("updateSeed", {
   methods: ["PUT"],
@@ -8,6 +8,7 @@ app.http("updateSeed", {
   handler: async (request, context) => {
     try {
       context.log(`Http function processed request for url "${request.url}"`);
+      await ensureReady();
       let updatedSeed;
       try {
         updatedSeed = await request.json();

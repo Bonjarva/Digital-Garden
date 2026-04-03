@@ -1,6 +1,6 @@
 // api/src/functions/listSeeds.js
 const { app } = require("@azure/functions");
-const { container } = require("../cosmosClient");
+const { container, ensureReady } = require("../cosmosClient");
 
 app.http("listSeeds", {
   methods: ["GET"],
@@ -9,6 +9,10 @@ app.http("listSeeds", {
   handler: async (request, context) => {
     try {
       context.log(`Http function processed request for url "${request.url}"`);
+      
+      // Ensure DB/Container exist
+      await ensureReady();
+
       // Return the full array
       const plotIdParam = request.query.get("plotId");
 

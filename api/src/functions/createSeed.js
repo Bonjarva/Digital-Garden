@@ -1,5 +1,5 @@
 const { app } = require("@azure/functions");
-const { container } = require("../cosmosClient");
+const { container, ensureReady } = require("../cosmosClient");
 
 app.http("createSeed", {
   methods: ["POST"],
@@ -9,6 +9,7 @@ app.http("createSeed", {
     context.log(`Http function processed request for url "${request.url}"`);
 
     try {
+      await ensureReady();
       let body;
       try {
         body = await request.json();
