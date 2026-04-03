@@ -15,12 +15,6 @@ function Seeds() {
     setEditingSeed(null);
   }
 
-  const refreshSeeds = async () => {
-    const res = await fetch("/api/listSeeds");
-    if (!res.ok) throw new Error("Failed to fetch seeds");
-    const data = await res.json();
-    setSeeds(data); // data is the array
-  };
 
   async function onAddSeed({ title, description, plotId }) {
     try {
@@ -43,7 +37,7 @@ function Seeds() {
         throw new Error(err.error || "Failed to create seed");
       }
 
-      await refreshSeeds(); // update state from backend
+      await loadSeeds(); // Use loadSeeds instead of refreshSeeds
 
       setModalError(null);
       closeForm();
@@ -76,7 +70,7 @@ function Seeds() {
         throw new Error(err.error || "Failed to edit seed");
       }
 
-      await refreshSeeds(); // update state from backend
+      await loadSeeds(); // Use loadSeeds instead of refreshSeeds
 
       setModalError(null);
       closeForm();
@@ -108,7 +102,7 @@ function Seeds() {
         throw new Error(err.error || "Failed to delete seed");
       }
 
-      await refreshSeeds(); // update state from backend
+      await loadSeeds(); // Use loadSeeds instead of refreshSeeds
 
       setPageError(null);
     } catch (err) {
@@ -174,44 +168,49 @@ function Seeds() {
 
   // Load seeds on component mount
   React.useEffect(() => {
-    async function loadSeeds() {
-      try {
-        setIsLoading(true);
-        setPageError(null);
-
-        const response = await fetch("/api/listSeeds");
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch seeds");
-        }
-        const data = await response.json();
-
-        setSeeds(data);
-      } catch (err) {
-        setPageError(err.message);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-
     loadSeeds();
   }, []);
 
+  async function loadSeeds() {
+    try {
+      setIsLoading(true);
+      setPageError(null);
+
+      const response = await fetch("/api/listSeeds");
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch seeds from the server. Check your connection or the API state.");
+      }
+      const data = await response.json();
+
+      setSeeds(data);
+    } catch (err) {
+      console.error("Error loading seeds:", err);
+      setPageError(err.message);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   return (
-    <>
-      <button
-        className="px-3 py-1 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
-        onClick={() => setIsFormOpen(true)}
-      >
-        Add Seed
-      </button>
+    <div className="space-y-6">
+      <div className="flex justify-between items-center">
+        <h1 className="text-3xl font-bold text-gray-900">Seeds Repository</h1>
+        <button
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-md flex items-center gap-2"
+          onClick={() => setIsFormOpen(true)}
+        >
+          <span>Add Seed</span>
+        </button>
+      </div>
+
       {isFormOpen && (
         <div
-          className="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
+          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
           onClick={() => closeForm()}
         >
           <div
-            className="bg-white rounded-lg shadow-lg w-full max-w-md p-6"
+            className="bg-white rounded-xl shadow-2xl w-full max-w-md p-6"
             onClick={(e) => e.stopPropagation()}
           >
             <AddSeedForm
@@ -226,20 +225,37 @@ function Seeds() {
           </div>
         </div>
       )}
+
       {pageError && (
-        <div className="mb-4 rounded bg-red-100 text-red-700 px-4 py-2">
-          {pageError}
+        <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded-r-lg shadow-sm animate-in fade-in slide-in-from-top-2 duration-300">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <svg className="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+              <div>
+                <h3 className="text-sm font-bold text-red-800 uppercase tracking-wide">Error Loading Seeds</h3>
+                <p className="text-sm text-red-700">{pageError}</p>
+              </div>
+            </div>
+            <button 
+              onClick={loadSeeds}
+              className="px-3 py-1 bg-red-100 text-red-800 rounded-md hover:bg-red-200 transition-colors text-sm font-semibold"
+            >
+              Try Again
+            </button>
+          </div>
         </div>
       )}
-      {isLoading && <p className="p-6 text-gray-500">Loading seeds...</p>}
-      <div className="mb-4">
-        <label className="mr-2 text-sm font-medium">Filter by plot:</label>
+
+      <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 flex flex-col sm:flex-row sm:items-center gap-4">
+        <label className="text-sm font-semibold text-gray-700">Filter by plot:</label>
         <select
           value={selectedPlotId}
           onChange={(e) => setSelectedPlotId(e.target.value)}
-          className="rounded-md border-gray-300 shadow-sm"
+          className="rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm transition-all"
         >
-          <option value="all">All</option>
+          <option value="all">All Plots</option>
           {plots.map((plot) => (
             <option key={plot.id} value={plot.id}>
               {plot.name}
@@ -248,26 +264,33 @@ function Seeds() {
         </select>
       </div>
 
-      {!isLoading && filteredSeeds.length === 0 ? (
-        <p className="text-gray-500 italic">No seeds in this plot yet 🌱</p>
+      {isLoading ? (
+        <div className="flex flex-col items-center justify-center p-12 text-gray-500">
+          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-500 mb-4"></div>
+          <p className="animate-pulse">Loading seeds from the garden...</p>
+        </div>
+      ) : filteredSeeds.length === 0 ? (
+        <div className="text-center p-16 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200">
+          <span className="text-4xl mb-4 block">🌱</span>
+          <p className="text-gray-600 text-lg font-medium">No seeds in this plot yet</p>
+          <p className="text-gray-400 text-sm mt-1">Start by adding a new seed to your digital garden!</p>
+        </div>
       ) : (
-        !isLoading && (
-          <div className="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredSeeds.map((seed, i) => (
-              <SeedCard
-                key={seed.id}
-                title={seed.title}
-                description={seed.description}
-                dateCreated={seed.dateCreated}
-                plotName={getPlotName(seed.plotId)}
-                onEdit={() => (setEditingSeed(seed), setIsFormOpen(true))}
-                onDelete={() => onDeleteSeed(seed)}
-              />
-            ))}
-          </div>
-        )
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredSeeds.map((seed) => (
+            <SeedCard
+              key={seed.id}
+              title={seed.title}
+              description={seed.description}
+              dateCreated={seed.dateCreated}
+              plotName={getPlotName(seed.plotId)}
+              onEdit={() => (setEditingSeed(seed), setIsFormOpen(true))}
+              onDelete={() => onDeleteSeed(seed)}
+            />
+          ))}
+        </div>
       )}
-    </>
+    </div>
   );
 }
 
