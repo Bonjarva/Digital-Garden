@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { createSeed, updateSeed, deleteSeed } from "../services/seedService";
 
 import SeedCard from "../components/SeedCard";
 import AddSeedForm from "../components/AddSeedForm";
@@ -88,12 +87,12 @@ function Seeds() {
     }
   }
 
-  async function onDeleteSeed(seedId) {
+  async function onDeleteSeed(seed) {
     try {
       setIsSaving(true);
       setPageError(null);
 
-      if (!seedId) {
+      if (!seed || !seed.id) {
         setPageError("Seed ID is required");
         return;
       }
@@ -101,7 +100,7 @@ function Seeds() {
       const response = await fetch("/api/deleteSeed", {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id: seedId }),
+        body: JSON.stringify({ id: seed.id, plotId: seed.plotId }),
       });
 
       if (!response.ok) {
@@ -140,7 +139,7 @@ function Seeds() {
   const filteredSeeds = Array.isArray(seeds)
     ? selectedPlotId === "all"
       ? seeds
-      : seeds.filter((seed) => seed.plotId === Number(selectedPlotId))
+      : seeds.filter((seed) => seed.plotId == selectedPlotId)
     : [];
 
   // Handle Escape key to close modal
@@ -262,7 +261,7 @@ function Seeds() {
                 dateCreated={seed.dateCreated}
                 plotName={getPlotName(seed.plotId)}
                 onEdit={() => (setEditingSeed(seed), setIsFormOpen(true))}
-                onDelete={() => onDeleteSeed(seed.id)}
+                onDelete={() => onDeleteSeed(seed)}
               />
             ))}
           </div>
