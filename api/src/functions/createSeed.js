@@ -1,5 +1,5 @@
 const { app } = require("@azure/functions");
-const store = require("../seedStore");
+const { container } = require("../cosmosClient");
 
 app.http("createSeed", {
   methods: ["POST"],
@@ -8,28 +8,38 @@ app.http("createSeed", {
     context.log(`Http function processed request for url "${request.url}"`);
 
     try {
-      const { title, description, plotId } = await request.json();
+      let body;
+      try {
+        body = await request.json();
+      } catch (jsonErr) {
+        return {
+          status: 400,
+          jsonBody: { error: "Invalid JSON in request body" },
+        };
+      }
+
+      const { title, description, plotId } = body;
 
       if (!title || !description) {
         return {
           status: 400,
-          body: { error: "Title and description required" },
+          jsonBody: { error: "Title and description required" },
         };
       }
 
       const newSeed = {
-        id: store.nextId++,
         title,
         description,
         plotId: plotId || null,
         dateCreated: new Date().toISOString(),
       };
 
-      store.seeds.push(newSeed);
+      const { resource: createdItem } = await container.items.create(newSeed);
 
-      return { status: 201, jsonBody: newSeed };
+      return { status: 201, jsonBody: createdItem };
     } catch (err) {
-      return { status: 500, body: { error: err.message } };
+      context.error("Error creating seed:", err);
+      return { status: 500, jsonBody: { error: err.message } };
     }
   },
 });
