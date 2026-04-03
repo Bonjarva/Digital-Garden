@@ -2,7 +2,7 @@
   "name": "digital-garden-api",
   "version": "1.0.0",
   "description": "Azure Functions API for Digital Garden",
-  "main": "src/index.js",
+  "main": "src/functions/*.js",
   "engines": {
     "node": "20.x"
   },
