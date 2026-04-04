@@ -1,4 +1,6 @@
 // api/src/functions/listSeeds.js
+console.log("listSeeds loaded");
+
 const { app } = require("@azure/functions");
 const { container, ensureReady } = require("../cosmosClient");
 
