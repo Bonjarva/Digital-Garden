@@ -61,29 +61,36 @@ This project is part of my 3-month learning plan to prepare for the **Azure Deve
 
 _(Updated during development)_
 
-- Week 1 (**Complete**):
-- Project initialized, README created, GitHub repo set up
-- Deployed Azure Static Web App with placeholder frontend
-- Basic Github actions CI/CD set up
+- **Weeks 1-3 (Complete)**:
+  - Project initialized, README created, GitHub repo set up.
+  - Deployed Azure Static Web App with React frontend and Tailwind CSS.
+  - Folder structure and basic wireframes implemented.
+  - Proper navigation bar and footer built.
+  - Azure Functions implemented for CRUD operations on seeds (`listSeeds`, `createSeed`, `updateSeed`, `deleteSeed`).
+  - Cosmos DB integration for persistent storage.
+  - GitHub Actions CI/CD pipeline fully operational.
 
-In progress: Week 2/3
+- **In Progress**:
+  - Resolving API connectivity issues in production (404 errors).
+  - Optimizing routing configuration between SWA and Azure Functions.
+  - Domain setup and custom configuration.
 
-- Migrate app to React
-- Make basic wire frame of front end
-- Create folder structure
-- Build placeholder pages from wire frame
-- Build proper Navigation bar (logo/Title)
-- CSS or Tailwind addition
-  - Nav, Footer, Tiles
-- Update README
+## ⚙️ Environment and Requirements
 
-  - with new front end structure
-  - Project timeline and milestones.
+- **Local Node Version**: `v22.21.1` (current environment).
+- **API Runtime**: Node.js `20.x` (configured in `api/package.json`).
 
-  Week 3:
+## 🐞 API Routing and Debugging (Production)
 
-  - Buy my own domain and update Azure to host on here
-    - Azure allows 2 free domains on static pages.
+An issue has been identified where calling the API in the Azure environment results in a **404 Not Found** error, despite working correctly in the local environment.
+
+### Diagnosis & Fixes:
+- **Routing Mismatch**: Azure Static Web Apps automatically maps the `api` folder to `/api`. Combined with the `"routePrefix": "api"` in `api/host.json`, this created a double prefix (`/api/api/listSeeds`).
+- **Implemented Fix**: A rewrite rule was added to `staticwebapp.config.json` to map `/api/*` to `/api/api/*`.
+- **Logging**: Enhanced console logging was added to both the React frontend and Azure Functions to trace the full absolute URL being called and received.
+
+### Local Development:
+- Vite is configured to proxy `/api` calls to `http://localhost:7071` via `vite.config.js`.
 
 ---
 
