@@ -7,6 +7,7 @@ const { container, ensureReady } = require("./cosmosClient");
 app.http("listSeeds", {
   methods: ["GET"],
   authLevel: "anonymous",
+  route: "listSeeds", // 👈 explicit route (important)
   handler: async (request, context) => {
     try {
       context.log(`Http function processed request for url "${request.url}"`);
