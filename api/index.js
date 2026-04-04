@@ -5,3 +5,4 @@ require("./listSeeds");
 require("./createSeed");
 require("./updateSeed");
 require("./deleteSeed");
+require("./test");
