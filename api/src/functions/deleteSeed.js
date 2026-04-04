@@ -6,6 +6,7 @@ app.http("deleteSeed", {
   authLevel: "anonymous",
   handler: async (request, context) => {
     try {
+      context.log(`Http function processed request for url "${request.url}"`);
       await ensureReady();
       let body;
       try {

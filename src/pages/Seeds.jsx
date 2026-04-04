@@ -26,6 +26,7 @@ function Seeds() {
         return;
       }
 
+      console.log("Calling API:", window.location.origin + "/api/createSeed");
       const response = await fetch("/api/createSeed", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -59,6 +60,7 @@ function Seeds() {
         setModalError("Title and description are required");
         return;
       }
+      console.log("Calling API:", window.location.origin + "/api/updateSeed");
       const response = await fetch("/api/updateSeed", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -91,6 +93,7 @@ function Seeds() {
         return;
       }
 
+      console.log("Calling API:", window.location.origin + "/api/deleteSeed");
       const response = await fetch("/api/deleteSeed", {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
@@ -176,6 +179,7 @@ function Seeds() {
       setIsLoading(true);
       setPageError(null);
 
+      console.log("Calling API:", window.location.origin + "/api/listSeeds");
       const response = await fetch("/api/listSeeds");
       
       if (!response.ok) {
