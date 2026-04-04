@@ -1,5 +1,5 @@
 const { app } = require("@azure/functions");
-const { container, ensureReady } = require("./cosmosClient");
+const { container, ensureReady } = require("../cosmosClient");
 
 app.http("deleteSeed", {
   methods: ["DELETE"],
