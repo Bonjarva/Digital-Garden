@@ -2,7 +2,7 @@
 console.log("listSeeds loaded");
 
 const { app } = require("@azure/functions");
-const { container, ensureReady } = require("../cosmosClient");
+const { container, ensureReady } = require("./cosmosClient");
 
 app.http("listSeeds", {
   methods: ["GET"],
